@@ -221,20 +221,20 @@ class Identity(nn.Module):
         return s
 
 class Zero(nn.Module):
-    def __init__(self, in_channels):
+    def __init__(self):
         super().__init__()
-        self.in_channels = in_channels
-        self.out_channels = in_channels
+        self.in_channels = None
+        self.out_channels = None
         
     def forward(self, x):
-        return 0*x
+        return None
 
     def convert_keras(self, x, layer_name=None):
-        return tf.keras.layers.Lambda(lambda x: 0*x)(x)
+        return None
 
     def print_layer(self):
         s = self.__class__.__name__
-        s += "\t" + str(self.in_channels) + "->" + str(self.out_channels)
+        # s += "\t" + str(self.in_channels) + "->" + str(self.out_channels)
         return s
 
 class Flatten(nn.Module):
@@ -260,29 +260,45 @@ class Flatten(nn.Module):
 
 
 class Add(nn.Module):
-    def __init__(self, in_channels):
+    def __init__(self, in_modules):
         super().__init__()
 
-        max_channel = max(in_channels)
-        self.in_channels = max_channel
-        self.out_channels = max_channel
-
         self.module_list = nn.ModuleList()
-        for in_ch in in_channels:
-            if in_ch < max_channel:
-                self.module_list.append(Conv2d(kernel_size=[1,1], in_channels=in_ch, out_channels=self.out_channels, batchnorm=True, relu=True))
-            else:
-                self.module_list.append(Identity(in_channels=self.in_channels))
+
+        in_channels = [m.out_channels for m in in_modules if m.out_channels is not None]
+
+        if len(in_channels) > 0:
+            max_channel = max(in_channels)
+            self.in_channels = max_channel
+            self.out_channels = max_channel
+            for m in in_modules:
+                if m.out_channels is None or m.out_channels==max_channel:
+                    self.module_list.append(Identity(in_channels=self.in_channels))
+                else:
+                    self.module_list.append(Conv2d(kernel_size=[1,1], in_channels=m.out_channels, out_channels=self.out_channels, batchnorm=True, relu=True))
+        else:
+            self.in_channels = None
+            self.out_channels = None
 
     def forward(self, x):
-        return torch.sum(torch.stack([self.module_list[i](x[i]) for i in range(len(self.module_list))]), dim=0)       
+        if len(self.module_list) > 0:
+            return torch.sum(torch.stack([self.module_list[i](x[i]) for i in range(len(self.module_list)) if x[i] is not None]), dim=0)
+        else:
+            return None
 
     def convert_keras(self, x, layer_name=None):
         y = []
         for i in range(0, len(self.module_list)):
-            y.append(self.module_list[i].convert_keras(x[i]))
+            if x[i] is not None:
+                y.append(self.module_list[i].convert_keras(x[i]))
 
-        return tf.keras.layers.Add()(y) 
+        if len(y) > 0:
+            return tf.keras.layers.Add()(y)
+        else:
+            return None
+
+    def is_empty(self):
+        return len(self.module_list) == 0
 
 class MaxPool(nn.Module):
     def __init__(self, in_channels, kernel_size=2, stride=2):

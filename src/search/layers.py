@@ -52,16 +52,6 @@ class Conv2d(ConvBase):
 
         return vanilla.layers.Conv2d(self.kernel_size, in_channels, out_channels, self.bn != None, self.relu != None, self.stride)
 
-        module_list = nn.ModuleList()
-        module_list.append(
-            nn.Conv2d(in_channels, out_channels, self.kernel_size, stride=self.stride, padding=self.padding, groups=self.groups, dilation=self.dilation)
-        )
-        if self.bn is not None:
-            module_list.append(nn.BatchNorm2d(out_channels))
-        if self.relu is not None:
-            module_list.append(nn.ReLU())
-        return nn.Sequential(module_list), out_channels
-
     def convert_keras(self, x, layer_name=None):
         x = tf.keras.layers.Conv2D(
             filters=self.get_hard_eff_channels(),
@@ -105,15 +95,6 @@ class DepthwiseConv2d(ConvBase):
 
         return vanilla.layers.DepthwiseConv2d(self.kernel_size, in_channels, out_channels, self.bn != None, self.relu != None, self.stride)
 
-        module_list = nn.ModuleList()
-        module_list.append(
-            nn.Conv2d(in_channels, out_channels, self.kernel_size, stride=self.stride, padding=self.padding, groups=out_channels, dilation=self.dilation)
-        )
-        if self.bn is not None:
-            module_list.append(nn.BatchNorm2d(out_channels))
-        if self.relu is not None:
-            module_list.append(nn.ReLU())
-        return nn.Sequential(module_list), out_channels
 
     def convert_keras(self, x, layer_name=None):
         x = tf.keras.layers.DepthwiseConv2D(
@@ -158,16 +139,6 @@ class DilatedConv2d(ConvBase):
         out_channels = self.get_hard_eff_channels()
 
         return vanilla.layers.DilatedConv2d(self.kernel_size, in_channels, out_channels, self.bn != None, self.relu != None, self.stride, self.dilation)
-
-        module_list = nn.ModuleList()
-        module_list.append(
-            nn.Conv2d(in_channels, out_channels, self.kernel_size, stride=self.stride, padding=self.padding, groups=self.groups, dilation=self.dilation)
-        )
-        if self.bn is not None:
-            module_list.append(nn.BatchNorm2d(out_channels))
-        if self.relu is not None:
-            module_list.append(nn.ReLU())
-        return nn.Sequential(module_list), out_channels
 
     def convert_keras(self, x, layer_name=None):
         x = tf.keras.layers.Conv2D(
@@ -252,15 +223,6 @@ class SeparableConv(nn.Module):
 
     def convert_to_vanilla(self, in_channels):
         return vanilla.layers.SeparableConv(self.kernel_size, in_channels, self.get_hard_eff_channels())
-
-        module_dict = nn.ModuleDict()
-        depthwise, _ = self.block_dict["depthwise"].convert_to_vanilla(in_channels)
-        pointwise, out_channels = self.block_dict["pointwise"].convert_to_vanilla(in_channels)
-
-        module_dict["depthwise"] = depthwise
-        module_dict["pointwise"] = pointwise
-
-        return nn.Sequential(module_dict), out_channels
 
     def print_layer(self):
         return self.block_dict["depthwise"].print_layer() + "\t" + self.block_dict["pointwise"].print_layer()
@@ -349,7 +311,7 @@ class Zero(Dmask):
         return self.__class__(self.layer_name, in_channels, self.hw_model, self.device)
 
     def convert_to_vanilla(self, in_channels):
-        return vanilla.layers.Zero(in_channels)
+        return vanilla.layers.Zero()
 
     def convert_keras(self, x, layer_name=None):
         return tf.keras.layers.Lambda(lambda x: 0*x)(x)
