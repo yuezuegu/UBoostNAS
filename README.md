@@ -1,19 +1,17 @@
-# DmaskingNAS
+# U-Boost NAS: Utilization-Boosted Differentiable Neural Architecture Search
+
+This repo contains the source code for the U-Boost NAS method presented in [cite]. It optimizes hardware resource utilization with task accuracy and latency to maximize inference performance. It estimates hardware utilization using a novel computational model for DNN accelerators.
+
 
 
 ## Code structure/note
-* `model`: in our case LeNet. NAS is performed on this with search space defined by `arch_def`
-* `hw_model`: simulates the device performance (i.e. latency) with the architecture defined by the `model`.
-* `loss_fn`: the loss function that drives NAS: $\mathcal{L}=\mathcal{L}_{data}+\lambda\cdot\mathcal{L}_{latency}$ 
+* `src/search`: contains the code for microarchitecture and channel search stages
+* `src/vanilla`: contains the code for final training stage
+* `src/data`: contains the code for dataloaders and preprocessing for various datasets
+* `src/hardware`: contains the code for hardware model and cycle-accurate hardware simulations
 
 ## NAS
-The NAS is implemented with DARTS-like method, see [1]. 
-
-> In each epoch, we train the network weights with 80% of training samples using SGD. We then train the
-Gumbel Softmax sampling parameter $\alpha$ with the remaining 20% using Adam.
-
-## Differences with prior work
-Prior work oversimplifies the hardware model latency measurements with constant or monotonically non-decreasing function wrt no. of channels
+This code implements the microarchitecture search as in DARTS-like methods and channel search using DMaskNAS method [2].
 
 ## Hardware model
 Computes the following runtime for convolutional cells:
@@ -40,11 +38,9 @@ for $w_i$ intervals between zero and a fixed value. This model corresponds more 
 
 TODO: explain a bit more the realistic case.
 
-## Next steps
-1. code the part that trains until completion the "winner" arch of the NAS
+## How to run
 
-
-
+python main.py #--help for information about optional arguments
 
 
 ## References
