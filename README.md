@@ -40,7 +40,7 @@ TODO: explain a bit more the realistic case.
 
 ## How to run
 
-python main.py #--help for information about optional arguments
+  python main.py #--help for information about optional arguments
 
 
 ## References
