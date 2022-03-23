@@ -1,0 +1,6 @@
+logger.out
+cifar10/**
+experiments/**
+**/__pycache__/**
+cpp.log
+*.out
