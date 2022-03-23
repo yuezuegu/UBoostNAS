@@ -25,10 +25,10 @@ with "matrixification" of the tensors,  where:
 * w is the width of the input
 * c is the number of channels
 * f is the number of filters 
-* k_1 is one dimension of the kernel
-* k_2 is the other dimension of the kernel
-* s_1 is one dimension of the systolic array
-* s_2 is the other dimension of the systolic array
+* k1 is one dimension of the kernel
+* k2 is the other dimension of the kernel
+* s1 is one dimension of the systolic array
+* s2 is the other dimension of the systolic array
 
 However, the ceil function is not differentiable and can only be used as a collection of point estimates. This hinders the neural architecture seach and allows only for evolutionary or reinforcement learning methods, which require orders of magnitude more computational resources compared to differentiable methods. For this reason, the ceil function is replaced with a soft approximation, the `smooth ceiling`:
 
@@ -39,7 +39,7 @@ $$ -->
 <div align="center"><img style="background: white;" src="https://render.githubusercontent.com/render/math?math=f_%7BT%2C%20%5Cmathbf%7B%20w%20%7D%7D(x)%3D%5Csum_%7Bi%7D%20%5Cfrac%7B1%7D%7B1%2B%5Cexp%7B(-T%20(x-w_i))%7D%7D"></div>
 
 
-for w_i intervals between zero and a fixed value. This model corresponds more with the realistic case.
+for wi intervals between zero and a fixed value. This model corresponds more with the realistic case.
 
 TODO: explain a bit more the realistic case.
 
