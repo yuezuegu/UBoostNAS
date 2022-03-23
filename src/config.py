@@ -11,8 +11,8 @@ def load_params():
 	parser.add_argument('--train_dataset', type=str, required=False, default="imagenet",
 		choices=['cifar10', 'imagenet100', "imagenet"])
 
-	parser.add_argument('--ms_no_epoch', type=int, required=False, default=0)
-	parser.add_argument('--cs_no_epoch', type=int, required=False, default=0)
+	parser.add_argument('--ms_no_epoch', type=int, required=False, default=1)
+	parser.add_argument('--cs_no_epoch', type=int, required=False, default=1)
 	parser.add_argument('--ft_no_epoch', type=int, required=False, default=1)
 
 	parser.add_argument('--hw_type', type=str, required=False, 
@@ -65,14 +65,14 @@ def load_params():
 	parser.add_argument('--seed', type=int, required=False, default=0)
 	parser.add_argument('--gpu_device', type=int, required=False, default=0)
 
-	parser.add_argument('--run_search', type=int, required=False, default=0, 
+	parser.add_argument('--run_search', type=int, required=False, default=1, 
 		help="Set to 1 to perform architecture search, set to 0 to skip")
 	parser.add_argument('--run_train', type=int, required=False, default=1,
 		help="Set to 1 to train selected architecture, set to 0 to skip")
 
 	parser.add_argument('--save_dir', type=str, required=False, default="experiments/tmp",
 		help='Save directory for results')
-	parser.add_argument('--arch_dir', type=str, required=False, default="experiments/run-2022_03_17-09_29_14/2022_03_17-09_29_14_991",
+	parser.add_argument('--arch_dir', type=str, required=False, default=None,
 		help='Directory to import pre-searched architecture. If set None, search stages will be performed')
 	
 	args = parser.parse_args()
