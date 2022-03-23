@@ -51,14 +51,22 @@ class Cell(nn.Module):
         xpp_t2 = self.module_dict["xpp_t2"].convert_keras(xpp, layer_name=layer_name+"_xpp_t2")
         xpp_t3 = self.module_dict["xpp_t3"].convert_keras(xpp, layer_name=layer_name+"_xpp_t3")
 
-        t1_add = vanilla.layers.Add([xp_t1.shape[3], xpp_t1.shape[3]]).convert_keras([xp_t1, xpp_t1])
+        t1_add = vanilla.layers.Add([self.module_dict["xp_t1"], 
+                                        self.module_dict["xpp_t1"]]).convert_keras([xp_t1, xpp_t1])
+
         t1_t2 = self.module_dict["t1_t2"].convert_keras(t1_add, layer_name=layer_name+"_t1_t2")
         t1_t3 = self.module_dict["t1_t3"].convert_keras(t1_add, layer_name=layer_name+"_t1_t3")
 
-        t2_add = vanilla.layers.Add([xp_t2.shape[3], xpp_t2.shape[3], t1_t2.shape[3]]).convert_keras([xp_t2, xpp_t2, t1_t2])
+        t2_add = vanilla.layers.Add([self.module_dict["xp_t2"], 
+                                        self.module_dict["xpp_t2"], 
+                                        self.module_dict["t1_t2"]]).convert_keras([xp_t2, xpp_t2, t1_t2])
+
         t2_t3 = self.module_dict["t2_t3"].convert_keras(t2_add, layer_name=layer_name+"_t2_t3")
 
-        out = vanilla.layers.Add([xp_t3.shape[3], xpp_t3.shape[3], t1_t3.shape[3], t2_t3.shape[3]]).convert_keras([xp_t3, xpp_t3, t1_t3, t2_t3])
+        out = vanilla.layers.Add([self.module_dict["xp_t3"], 
+                                    self.module_dict["xpp_t3"], 
+                                    self.module_dict["t1_t3"], 
+                                    self.module_dict["t2_t3"]]).convert_keras([xp_t3, xpp_t3, t1_t3, t2_t3])
 
         if "out_maxpool" in self.module_dict:
             out = self.module_dict["out_maxpool"].convert_keras(out, layer_name=layer_name+"_out_maxpool")
