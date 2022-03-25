@@ -3,6 +3,8 @@
 import torch 
 import os 
 import shutil 
+import time 
+from datetime import datetime 
 
 from glob import glob
 
@@ -132,3 +134,48 @@ def plot_alphas(alphas, k, x_tick_labels=None):
 
 	plt.savefig(f"results/alphas_{k}.png")
 	plt.close()
+
+
+
+
+def is_proc_ended(proc):
+    retcode = proc.poll()
+    if retcode is not None: # Process finished.
+        print("Process {} ended with code {}".format(proc.pid, retcode))
+        if retcode != 0:
+            print("FAILED: Return code is not 0")
+        return True
+    else:
+        return False
+
+def wait_for_proc_limit(running_procs, max_procs):
+    while True:
+        for proc in running_procs:
+            if (is_proc_ended(proc)):
+                running_procs.remove(proc)
+                
+        if len(running_procs) < max_procs: #Block if there is more than x number of running threads
+            return running_procs
+
+        time.sleep(.1)
+
+def wait_all_finish(running_procs):
+    while True:
+        for proc in running_procs:
+            if (is_proc_ended(proc)):
+                running_procs.remove(proc)
+                
+        if len(running_procs) == 0:
+            return running_procs
+
+        time.sleep(.1)
+
+def date_minute():
+    return datetime.now().strftime("%Y_%m_%d-%H_%M")
+
+def date_second():
+    return datetime.now().strftime("%Y_%m_%d-%H_%M_%S")
+
+def date_millisecond():
+    return datetime.now().strftime("%Y_%m_%d-%H_%M_%S_%f")[:-3] #-3 to convert us to ms
+

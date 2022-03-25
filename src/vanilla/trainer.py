@@ -49,6 +49,7 @@ class Trainer:
             logger=[pl_logger],
             default_root_dir=self.args.save_dir,
             gradient_clip_val=self.args.train_weight_grad_clip,
+            progress_bar_refresh_rate=100 #0 to disable progress bar
             #profiler="simple"
         )
 
