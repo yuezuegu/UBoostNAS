@@ -4,7 +4,6 @@ import time
 
 from src.utils import date_second, date_millisecond, wait_for_proc_limit, wait_all_finish
 
-
 MAX_NO_PROC = 1
 
 SETTINGS = {
@@ -12,7 +11,7 @@ SETTINGS = {
 }
 
 STACKS = [
-    [1,0,1,0,1,0], 
+    [1,0,0,1,0,0,1,0,0], 
 ]
 
 if __name__=="__main__":
@@ -38,7 +37,7 @@ if __name__=="__main__":
                 os.mkdir(SAVE_DIR)
 
                 cmd = f"python main.py \
-                    --train_batch_size 512 \
+                    --train_batch_size 256 \
                     --train_sgd_init_lr 0.02 \
                     --train_dataset imagenet\
                     --run_search 0 \
@@ -47,7 +46,7 @@ if __name__=="__main__":
                     --ms_no_epoch {0} \
                     --cs_no_epoch {0} \
                     --ft_no_epoch {100} \
-                    --arch_dir experiments/run-2022_03_17-09_29_14/2022_03_17-09_29_14_991 \
+                    --arch_dir experiments/run-2022_03_14-14_14_22/2022_03_14-14_14_22_690 \
                     --util_coef {UTIL_COEF} \
                     --lat_coef {LAT_COEF} \
                     --gpu_device {gpu_devices[cnt%len(gpu_devices)]} \
