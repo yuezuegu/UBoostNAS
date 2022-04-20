@@ -186,23 +186,56 @@ class Cell(nn.Module):
         new_dict["xpp_t3"]  = self.block_dict["xpp_t3"].convert_to_vanilla(new_dict["xpp_pre"].out_channels)
 
         new_dict["t1_add"] = vanilla.layers.Add([
-            new_dict["xp_t1"].out_channels,
-            new_dict["xpp_t1"].out_channels]) 
+            new_dict["xp_t1"],
+            new_dict["xpp_t1"]])
 
-        new_dict["t1_t2"]  = self.block_dict["t1_t2"].convert_to_vanilla(new_dict["t1_add"].out_channels)
+        if new_dict["t1_add"].is_empty():
+            new_dict["t1_t2"] = vanilla.layers.Zero() 
+            new_dict["t1_t3"] = vanilla.layers.Zero() 
+        else:
+            new_dict["t1_t2"]  = self.block_dict["t1_t2"].convert_to_vanilla(new_dict["t1_add"].out_channels)
+            new_dict["t1_t3"]  = self.block_dict["t1_t3"].convert_to_vanilla(new_dict["t1_add"].out_channels)
+
         new_dict["t2_add"] = vanilla.layers.Add([
-            new_dict["t1_t2"].out_channels, 
-            new_dict["xp_t2"].out_channels, 
-            new_dict["xpp_t2"].out_channels])
+            new_dict["t1_t2"], 
+            new_dict["xp_t2"], 
+            new_dict["xpp_t2"]])
 
-        new_dict["t2_t3"]  = self.block_dict["t2_t3"].convert_to_vanilla(new_dict["t2_add"].out_channels)
-        new_dict["t1_t3"]  = self.block_dict["t1_t3"].convert_to_vanilla(new_dict["t1_add"].out_channels)
+        if new_dict["t2_add"].is_empty():
+            new_dict["t2_t3"] = vanilla.layers.Zero()
+        else:
+            new_dict["t2_t3"] = self.block_dict["t2_t3"].convert_to_vanilla(new_dict["t2_add"].out_channels)
         
+        # Prune graph backward
+        if isinstance(new_dict["t2_t3"], vanilla.layers.Zero):
+            new_dict["t1_t2"] = vanilla.layers.Zero()
+            new_dict["xp_t2"] = vanilla.layers.Zero()
+            new_dict["xpp_t2"] = vanilla.layers.Zero()
+            new_dict["t2_add"] = vanilla.layers.Add([])
+
+        if (isinstance(new_dict["t1_t3"], vanilla.layers.Zero) and 
+            isinstance(new_dict["t1_t2"], vanilla.layers.Zero)):
+            new_dict["xp_t1"] = vanilla.layers.Zero()
+            new_dict["xpp_t1"] = vanilla.layers.Zero()
+            new_dict["t1_add"] = vanilla.layers.Add([])
+
+        if (isinstance(new_dict["xp_t1"], vanilla.layers.Zero) and
+            isinstance(new_dict["xp_t2"], vanilla.layers.Zero) and
+            isinstance(new_dict["xp_t3"], vanilla.layers.Zero)):
+            new_dict["xp_pre"] = vanilla.layers.Zero()
+
+        if (isinstance(new_dict["xpp_t1"], vanilla.layers.Zero) and
+            isinstance(new_dict["xpp_t2"], vanilla.layers.Zero) and
+            isinstance(new_dict["xpp_t3"], vanilla.layers.Zero)):
+            new_dict["xpp_pre"] = vanilla.layers.Zero()
+
         new_dict["t3_add"] = vanilla.layers.Add([
-            new_dict["t2_t3"].out_channels, 
-            new_dict["t1_t3"].out_channels, 
-            new_dict["xp_t3"].out_channels, 
-            new_dict["xpp_t3"].out_channels]) 
+            new_dict["t2_t3"], 
+            new_dict["t1_t3"], 
+            new_dict["xp_t3"], 
+            new_dict["xpp_t3"]]) 
+
+        assert new_dict["t3_add"].is_empty() == False, "Microarchitecture is empty"
 
         if out_maxpool:
             new_dict["out_maxpool"] = self.block_dict["out_maxpool"].convert_to_vanilla(new_dict["t3_add"].out_channels)

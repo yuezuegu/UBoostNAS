@@ -17,7 +17,7 @@ Computes the following runtime for convolutional cells:
 \texttt{RUNTIME} = \left\lceil \frac{k_1k_2c}{s_1} \right\rceil \left\lceil \frac{f}{s_2} \right\rceil hwB 
 $$ --> 
 
-<div align="center"><img style="background: white;" src="https://render.githubusercontent.com/render/math?math=%5Ctexttt%7BRUNTIME%7D%20%3D%20%5Cleft%5Clceil%20%5Cfrac%7Bk_1k_2c%7D%7Bs_1%7D%20%5Cright%5Crceil%20%5Cleft%5Clceil%20%5Cfrac%7Bf%7D%7Bs_2%7D%20%5Cright%5Crceil%20hwB%20"></div>
+<div align="center"><img width=300 style="background: white;" src="https://render.githubusercontent.com/render/math?math=%5Ctexttt%7BRUNTIME%7D%20%3D%20%5Cleft%5Clceil%20%5Cfrac%7Bk_1k_2c%7D%7Bs_1%7D%20%5Cright%5Crceil%20%5Cleft%5Clceil%20%5Cfrac%7Bf%7D%7Bs_2%7D%20%5Cright%5Crceil%20hwB%20"></div>
 with "matrixification" of the tensors,  where:
 
 * B is the number of batches
@@ -25,10 +25,10 @@ with "matrixification" of the tensors,  where:
 * w is the width of the input
 * c is the number of channels
 * f is the number of filters 
-* k_1 is one dimension of the kernel
-* k_2 is the other dimension of the kernel
-* s_1 is one dimension of the systolic array
-* s_2 is the other dimension of the systolic array
+* k1 is one dimension of the kernel
+* k2 is the other dimension of the kernel
+* s1 is one dimension of the systolic array
+* s2 is the other dimension of the systolic array
 
 However, the ceil function is not differentiable and can only be used as a collection of point estimates. This hinders the neural architecture seach and allows only for evolutionary or reinforcement learning methods, which require orders of magnitude more computational resources compared to differentiable methods. For this reason, the ceil function is replaced with a soft approximation, the `smooth ceiling`:
 
@@ -36,10 +36,10 @@ However, the ceil function is not differentiable and can only be used as a colle
 f_{T, \mathbf{ w }}(x)=\sum_{i} \frac{1}{1+\exp{(-T (x-w_i))}}
 $$ --> 
 
-<div align="center"><img style="background: white;" src="https://render.githubusercontent.com/render/math?math=f_%7BT%2C%20%5Cmathbf%7B%20w%20%7D%7D(x)%3D%5Csum_%7Bi%7D%20%5Cfrac%7B1%7D%7B1%2B%5Cexp%7B(-T%20(x-w_i))%7D%7D"></div>
+<div align="center"><img width=300 style="background: white;" src="https://render.githubusercontent.com/render/math?math=f_%7BT%2C%20%5Cmathbf%7B%20w%20%7D%7D(x)%3D%5Csum_%7Bi%7D%20%5Cfrac%7B1%7D%7B1%2B%5Cexp%7B(-T%20(x-w_i))%7D%7D"></div>
 
 
-for w_i intervals between zero and a fixed value. This model corresponds more with the realistic case.
+for wi intervals between zero and a fixed value. This model corresponds more with the realistic case.
 
 TODO: explain a bit more the realistic case.
 
