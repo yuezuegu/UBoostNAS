@@ -5,3 +5,7 @@ experiments/**
 cpp.log
 *.out
 wandb/**
+saved-models
+run-2022_03_14-14_14_22.zip
+__MACOSX
+src/config copy.py
