@@ -44,8 +44,8 @@ def load_params():
 	parser.add_argument('--adam_init_lr', type=float, required=False, default=0.1)
 	parser.add_argument('--adam_weight_decay', type=float, required=False, default=0)
 
-	parser.add_argument('--train_batch_size', type=int, required=False, default=512)
-	parser.add_argument('--train_sgd_init_lr', type=float, required=False, default=0.02)
+	parser.add_argument('--train_batch_size', type=int, required=False, default=256)
+	parser.add_argument('--train_sgd_init_lr', type=float, required=False, default=0.01)
 	parser.add_argument('--train_sgd_momentum', type=float, required=False, default=0.9)
 	parser.add_argument('--train_sgd_weight_decay', type=float, required=False, default=1e-4)
 	parser.add_argument('--train_weight_grad_clip', type=float, required=False, default=0.5)
@@ -72,7 +72,7 @@ def load_params():
 
 	parser.add_argument('--save_dir', type=str, required=False, default="experiments/tmp",
 		help='Save directory for results')
-	parser.add_argument('--arch_dir', type=str, required=False, default="experiments/run-2022_03_17-09_29_14/2022_03_17-09_29_14_991",
+	parser.add_argument('--arch_dir', type=str, required=False, default="experiments/run-2022_03_14-14_14_22/2022_03_14-14_14_22_690",
 		help='Directory to import pre-searched architecture. If set None, search stages will be performed')
 	
 	args = parser.parse_args()

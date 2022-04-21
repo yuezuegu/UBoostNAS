@@ -9,7 +9,6 @@ from src.utils import (
     wait_all_finish,
 )
 
-
 MAX_NO_PROC = 1
 
 SETTINGS = {
