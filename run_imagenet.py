@@ -16,7 +16,7 @@ SETTINGS = {
 }
 
 STACKS = [
-    [1, 0, 1, 0, 1, 0],
+    [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
     # [1, 0, 0, 1, 0, 0, 1, 0, 0]
 ]
 
@@ -49,10 +49,10 @@ if __name__ == "__main__":
                     --run_search 0 \
                     --run_train 1 \
                     --cs_stacks {cs_stacks_str} \
-                    --ms_no_epoch {0} \
-                    --cs_no_epoch {0} \
+                    --ms_no_epoch {20} \
+                    --cs_no_epoch {40} \
                     --ft_no_epoch {100} \
-                    --arch_dir saved-models/stacks6 \
+                    --arch_dir experiments/run-2022_04_21-14_19_02/2022_04_21-14_19_02_181 \
                     --util_coef {UTIL_COEF} \
                     --lat_coef {LAT_COEF} \
                     --gpu_device {gpu_devices[cnt%len(gpu_devices)]} \

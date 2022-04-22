@@ -75,6 +75,6 @@ class Cell(nn.Module):
 
     def print_layer(self):
         s = ""
-        for i in ["xp_t1", "xp_t2", "xp_t3", "xpp_t1", "xpp_t2", "xpp_t3", "t1_t2", "t1_t3", "t2_t3"]:
+        for i in ["xp_pre", "xpp_pre", "xp_t1", "xp_t2", "xp_t3", "xpp_t1", "xpp_t2", "xpp_t3", "t1_t2", "t1_t3", "t2_t3"]:
             s += "\n" + i + ":\t" +  self.module_dict[i].print_layer()
         return s

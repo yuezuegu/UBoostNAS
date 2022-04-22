@@ -103,7 +103,6 @@ class ImageNet100C(CustomImageNet):
             **kwargs,
         )
 
-
 class ImageNetDataModule(pl.LightningDataModule):
     def __init__(
         self,
@@ -128,14 +127,14 @@ class ImageNetDataModule(pl.LightningDataModule):
                 T.ToTensor(),
                 T.RandomResizedCrop(self.cropsize),
                 T.RandomHorizontalFlip(),
-                # T.Normalize(self.mean, self.std),
+                T.Normalize(self.mean, self.std),
             ]
         )
         self.test_transform = T.Compose([
                 T.ToTensor(), 
                 T.Resize(resize), 
                 T.CenterCrop(self.cropsize),
-                # T.Normalize(self.mean, self.std),
+                T.Normalize(self.mean, self.std),
             ]
         )
         self.train_batch_size = train_batch_size
