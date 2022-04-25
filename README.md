@@ -1,6 +1,6 @@
 # U-Boost NAS: Utilization-Boosted Differentiable Neural Architecture Search
 
-This repo contains the source code for the U-Boost NAS method presented in [cite]. It optimizes hardware resource utilization with task accuracy and latency to maximize inference performance. It estimates hardware utilization using a novel computational model for DNN accelerators.
+This repo contains the source code for the U-Boost NAS method presented in this [paper](https://arxiv.org/abs/2203.12412). It optimizes hardware resource utilization with task accuracy and latency to maximize inference performance. It estimates hardware utilization using a novel computational model for DNN accelerators.
 
 ## Code structure/note
 * `src/search`: contains the code for microarchitecture and channel search stages
@@ -46,6 +46,10 @@ TODO: explain a bit more the realistic case.
 ## How to run
 
 `python main.py #--help for information about optional arguments`
+
+
+## Citation
+If you use this code, please cite our [paper](https://arxiv.org/abs/2203.12412).
 
 
 ## References
