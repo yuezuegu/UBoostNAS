@@ -9,7 +9,7 @@ This repo contains the source code for the U-Boost NAS method presented in this 
 * `src/hardware`: contains the code for hardware model and cycle-accurate hardware simulations
 
 ## NAS
-This code implements the microarchitecture search as in DARTS-like methods and channel search using DMaskNAS method [2].
+This code implements the microarchitecture search as in DARTS-like methods and channel search using DMaskNAS method.
 
 ## Hardware model
 Computes the following runtime for convolutional cells:
@@ -50,8 +50,3 @@ TODO: explain a bit more the realistic case.
 
 ## Citation
 If you use this code, please cite our [paper](https://arxiv.org/abs/2203.12412).
-
-
-## References
-
-[1]: Wan A, Dai X, Zhang P, He Z, Tian Y, Xie S, Wu B, Yu M, Xu T, Chen K, Vajda P. Fbnetv2: Differentiable neural architecture search for spatial and channel dimensions. InProceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition 2020 (pp. 12965-12974).
